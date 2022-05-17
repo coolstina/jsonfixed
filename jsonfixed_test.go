@@ -15,6 +15,7 @@
 package jsonfixed
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,7 +38,8 @@ func TestParse(t *testing.T) {
 		"graduated_str_at":"1433841657",
 		"deleted_at":null,
 		"fail_data":"<nil>",
-		"qq":"100000"
+		"qq":"100000",
+		"percent":"55.20"
 	}`
 
 	template := Template{
@@ -53,9 +55,11 @@ func TestParse(t *testing.T) {
 		"logout_int":       NewDestinationOfBool(0),
 		"logout_str":       NewDestinationOfBool("0"),
 		"qq":               NewDestinationOfInteger(IntegerTypeOfInt),
+		"percent":          NewDestinationOfFloat(FloatTypeOfFloat64),
 	}
 
 	actual, err := Convert([]byte(data), template)
 	assert.NoError(t, err)
 	assert.NotNil(t, actual)
+	fmt.Printf("%s\n", actual)
 }
