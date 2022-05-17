@@ -65,6 +65,12 @@ func Convert(data []byte, template Template) ([]byte, error) {
 					return nil, err
 				}
 				r[k] = val
+			case *DestinationOfFloat:
+				val, err := floater(v, FloatType(destination.(int)))
+				if err != nil {
+					return nil, err
+				}
+				r[k] = val
 			}
 		}
 	}
@@ -114,6 +120,28 @@ func inter(original interface{}, destination IntegerType) (interface{}, error) {
 			return nil, err
 		}
 		original = i(dst)
+	}
+
+	return original, nil
+}
+
+func floater(original interface{}, destination FloatType) (interface{}, error) {
+	switch val := original.(type) {
+	case string:
+		var bit int
+		switch destination {
+		case FloatTypeOfFloat32:
+			bit = 32
+		case FloatTypeOfFloat64:
+			bit = 64
+		}
+
+		float, err := strconv.ParseFloat(val, bit)
+		if err != nil {
+			return nil, err
+		}
+
+		return float, nil
 	}
 
 	return original, nil
